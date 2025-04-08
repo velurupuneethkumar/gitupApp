@@ -16,7 +16,7 @@ import StudentCurrent from './components/StudentComponent/StudentCurrent';
 import CourseSubscription from './components/SubscriptionComponent/CourseSubscription';
 import { useState } from 'react';
 import CourseSubscriptionList from './components/SubscriptionComponent/CourseSubscriptionList';
-import SubscriptionList from './components/SubscriptionComponent/SubscriptionList';
+import Subscriptions from './components/SubscriptionComponent/Subscriptions';
 import SubscriptionUpdate from './components/SubscriptionComponent/SubscriptionUpdate';
 import CurrentSubscriptionList from './components/SubscriptionComponent/CurrentSubscriptionList';
 import Payment from './components/PaymentComponent/Payment';
@@ -42,7 +42,7 @@ function App() {
           <Route path='/current-student' element={<StudentCurrent></StudentCurrent>}></Route>
           <Route path='/course-subscription/:courseId' element={<CourseSubscription></CourseSubscription>}></Route>
           <Route path='/course-subscription-list' element={<CourseSubscriptionList></CourseSubscriptionList>}></Route>
-          <Route path='/course-subscriptions' element={<SubscriptionList></SubscriptionList>}></Route>
+          <Route path='/subscriptions' element={<Subscriptions></Subscriptions>}></Route>
           <Route path='/subscription-update/:subscriptionId' element={<SubscriptionUpdate></SubscriptionUpdate>}></Route>
           <Route path='/current-Subscription' element={<CurrentSubscriptionList></CurrentSubscriptionList>}></Route>
           <Route path='/payment' element={<Payment></Payment>}></Route>

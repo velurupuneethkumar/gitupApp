@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getSubscriptionById, updateSubscription } from '../../services/CourseSubscriptionService';
@@ -12,7 +13,7 @@ const SubscriptionUpdate = () => {
     installmentAmount: 0,
     totalAmount: 0,
     subscriptionDate: "",
-    status: "active"
+    status: ""
   });
 
   // Fetch subscription details on first render
@@ -87,7 +88,6 @@ const SubscriptionUpdate = () => {
         <div>
           <label className="block text-gray-600">Status:</label>
           <select value={subscription.status} onChange={handleStatusChange} className="w-full px-3 py-2 border rounded">
-            <option value="active">Active</option>
             <option value="expired">Expired</option>
             <option value="completed">Completed</option>
           </select>

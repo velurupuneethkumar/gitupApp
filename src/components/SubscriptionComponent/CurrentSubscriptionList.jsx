@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { getAllCurrentSubscriptions } from '../../services/CourseSubscriptionService';
 import { useNavigate } from 'react-router-dom';
@@ -29,7 +30,7 @@ const CurrentSubscriptionList = () => {
                 <th className="border border-gray-300 px-4 py-2">Student ID</th>
                 <th className="border border-gray-300 px-4 py-2">Installments</th>
                 <th className="border border-gray-300 px-4 py-2">Installment Amount (₹)</th>
-                <th className="border border-gray-300 px-4 py-2">Total Amount (₹)</th>
+
                 <th className="border border-gray-300 px-4 py-2">Subscription Date</th>
                 <th className="border border-gray-300 px-4 py-2">End Date</th>
                 <th className="border border-gray-300 px-4 py-2">Status</th>
@@ -43,7 +44,6 @@ const CurrentSubscriptionList = () => {
                   <td className="border border-gray-300 px-4 py-2">{subscription.studentId}</td>
                   <td className="border border-gray-300 px-4 py-2">{subscription.installments}</td>
                   <td className="border border-gray-300 px-4 py-2">{subscription.installmentAmount}</td>
-                  <td className="border border-gray-300 px-4 py-2">{subscription.totalAmount}</td>
                   <td className="border border-gray-300 px-4 py-2">{subscription.subscriptionDate}</td>
                   <td className="border border-gray-300 px-4 py-2">{subscription.endDate}</td>
                   <td className="border border-gray-300 px-4 py-2">{subscription.status}</td>

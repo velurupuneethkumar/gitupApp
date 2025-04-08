@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getSubscriptionById } from '../../services/CourseSubscriptionService';
-import { generateBilId, savePayment } from '../../services/PaymentService';
+import { getSubscriptionById,updateSubscription } from '../../services/CourseSubscriptionService';
+import { generateBilId, savePayment, getMaxInstallmentNumber } from '../../services/PaymentService';
+
 
 const Payment = () => {
     const [payment, setPayment] = useState({
@@ -11,11 +12,28 @@ const Payment = () => {
         amount: 0,
         payDate: ''
     });
+    
+    const [subInstallments,setSubInstallments] = useState(0);
+    const [installment,setInstallment] = useState(0);
     const { id: subscriptionId } = useParams();
     const [billId, setBillId] = useState('');
     const navigate = useNavigate();
-
+    const [subscription,setSubscription] = useState({
+        subscriptionId: "",
+        courseId: "",
+        installments: 0,
+        installmentAmount: 0,
+        totalAmount: 0,
+        subscriptionDate: "",
+        status: ""
+      });
+    const getInstallmentNumber=()=>{
+        getMaxInstallmentNumber(subscriptionId).then(response =>{
+            setInstallment(response.data+1)
+        })
+    }
     useEffect(() => {
+        getInstallmentNumber();
         generateBilId().then(response => {
             setBillId(response.data);
         });
@@ -27,8 +45,11 @@ const Payment = () => {
             setPayment(prev => ({
                 ...prev,
                 subscriptionId: subscriptionId,
-                amount: response.data.installmentAmount
-            }));
+                amount: response.data.installmentAmount,
+                installmentNo:installment
+            }))
+            setSubscription(response.data)
+            setSubInstallments(response.data.installments);
         });
     };
 
@@ -36,18 +57,27 @@ const Payment = () => {
         const { name, value } = event.target;
         setPayment(prev => ({ ...prev, [name]: value }));
     };
-
     const handlePayment = (event) => {
         event.preventDefault();
+        
+        payment.installmentNo = installment;
         const finalPayment = { ...payment, billNumber: billId };
+        if(payment.installmentNo === subInstallments){
+            subscription.status = 'complete';
+            
+            updateSubscription(subscription).then(response =>{
+                alert('All dues are cleared');
+            }).catch(err => console.log(err))
+        }
+        
         savePayment(finalPayment).then(() => {
-            alert('Payment successful');
+            alert(`Payment successful for installmentNo ${installment}`);
             navigate('/StudentMenu');
         });
     };
 
     return (
-<div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <div className="flex justify-center items-center min-h-screen bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
                 <h2 className="text-2xl font-semibold text-center mb-6">Make Payment</h2>
                 <form onSubmit={handlePayment} className="space-y-4">
@@ -61,7 +91,7 @@ const Payment = () => {
                     </div>
                     <div>
                         <label className="block text-gray-700">Installment No:</label>
-                        <input type="text" name="installmentNo" value={payment.installmentNo} onChange={onChangeHandler}  className="w-full p-2 border rounded" />
+                        <input type="text" name="installmentNo" value={installment} readOnly  className="w-full p-2 border rounded" />
                     </div>
                     <div>
                         <label className="block text-gray-700">Amount:</label>

@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { saveStudent, generateRegistration,getStudentStatusByUsername } from "../../services/StudentService"
+
+import React, { useState, useEffect } from 'react';
+import { saveStudent, generateRegistration, getStudentStatusByUsername } from "../../services/StudentService";
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 
 const StudentAddition = () => {
   const [student, setStudent] = useState({
@@ -11,85 +11,145 @@ const StudentAddition = () => {
     mobile: "",
     studentLevel: "",
   });
+
+  const [errors, setErrors] = useState({});
   const [newId, setNewId] = useState(0);
-  let navigate = useNavigate();
-  const showStudentId = () => {
-    generateRegistration().then(response => {
-      setNewId(response.data);
-      // course.courseId=response.data;
-    });
-  }
+  const navigate = useNavigate();
+
   useEffect(() => {
     checkStatus();
   }, []);
+
+  const showStudentId = () => {
+    generateRegistration().then((response) => {
+      setNewId(response.data);
+    });
+  };
+
+  const checkStatus = () => {
+    getStudentStatusByUsername().then((response) => {
+      if (response.data === true || response.data === false) {
+        alert("Student is already registered...");
+        navigate("/StudentMenu");
+      } else {
+        showStudentId();
+      }
+    });
+  };
+
   const onChangeHandler = (event) => {
-    event.persist();
-    const name = event.target.name;
-    const value = event.target.value;
-    setStudent(values => ({ ...values, [name]: value }));
+    const { name, value } = event.target;
+    setStudent((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: '' });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!student.studentName.trim()) newErrors.studentName = "Student name is required";
+    if (!student.address.trim()) newErrors.address = "Address is required";
+    if (!student.studentLevel.trim()) newErrors.studentLevel = "Student level is required";
+    if (!student.mobile.trim()) newErrors.mobile = "Mobile number is required";
+    else if (!/^\d{10}$/.test(student.mobile)) newErrors.mobile = "Mobile number must be 10 digits";
+    return newErrors;
   };
 
   const studentSave = (event) => {
     event.preventDefault();
-    student.registrationNumber = newId;
-    // alert(""+course.courseId);
-    saveStudent(student).then(response => {
+    const validationErrors = validateForm();
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    const updatedStudent = { ...student, registrationNumber: newId };
+    saveStudent(updatedStudent).then(() => {
       alert("New student is saved");
       navigate('/StudentMenu');
+    }).catch(() => {
+      alert("Error saving student. Try again.");
     });
-  }
-
-  const checkStatus = () => {
-    getStudentStatusByUsername().then(response => {
-      if (response.data === true || response.data === false) {
-        alert("Student is already registered...");
-        navigate("/StudentMenu");
-      }
-      else {
-        showStudentId();
-      }
-    })
-  }
+  };
 
   return (
-    <div>
-      <br></br>
-      <div className="container">
-        <div className="row">
-          <div className="card col-md-12 offset-md-3 offset-md-3">
-            <div className="card-body">
-              <h2 className="text-center"><u>New Student Addition</u></h2>
-              <br />
-              <div className="form-group">
-                <label> studentName: </label>
-                <input placeholder="studentName" name="studentName" className="form-control"
-                  value={student.studentName} onChange={onChangeHandler} />
-              </div>
-              <div className="form-group">
-                <label>address: </label>
-                <input placeholder="address" name="address" className="form-control"
-                  value={student.address} onChange={onChangeHandler} />
-              </div>
-              <div className="form-group">
-                <label>studentLevel: </label>
-                <input placeholder="studentLevel" name="studentLevel" className="form-control"
-                  value={student.studentLevel} onChange={onChangeHandler} />
-              </div>
-              <div className="form-group">
-                <label> mobile: </label>
-                <input placeholder="mobile" name="mobile" className="form-control"
-                  value={student.mobile} onChange={onChangeHandler} />
-              </div>
-
-              <button className="btn btn-success" onClick={studentSave}>Save</button>
-
-
-            </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-slate-100 to-blue-100 px-4">
+      <div className="w-full max-w-xl bg-white p-8 rounded-2xl shadow-md">
+        <h2 className="text-3xl font-bold text-center text-blue-700 mb-6 underline">New Student Addition</h2>
+        <form onSubmit={studentSave} className="space-y-5">
+          <div>
+            <label className="block text-gray-700 font-semibold mb-1">Student Name</label>
+            <input
+              type="text"
+              name="studentName"
+              placeholder="Enter student name"
+              value={student.studentName}
+              onChange={onChangeHandler}
+              className={`w-full border px-4 py-2 rounded-lg focus:outline-none focus:ring-2 ${
+                errors.studentName ? 'border-red-500 focus:ring-red-400' : 'border-gray-300 focus:ring-blue-300'
+              }`}
+            />
+            {errors.studentName && <p className="text-red-500 text-sm">{errors.studentName}</p>}
           </div>
-        </div>
+
+          <div>
+            <label className="block text-gray-700 font-semibold mb-1">Address</label>
+            <input
+              type="text"
+              name="address"
+              placeholder="Enter address"
+              value={student.address}
+              onChange={onChangeHandler}
+              className={`w-full border px-4 py-2 rounded-lg focus:outline-none focus:ring-2 ${
+                errors.address ? 'border-red-500 focus:ring-red-400' : 'border-gray-300 focus:ring-blue-300'
+              }`}
+            />
+            {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-semibold mb-1">Student Level</label>
+            <input
+              type="text"
+              name="studentLevel"
+              placeholder="Enter student level"
+              value={student.studentLevel}
+              onChange={onChangeHandler}
+              className={`w-full border px-4 py-2 rounded-lg focus:outline-none focus:ring-2 ${
+                errors.studentLevel ? 'border-red-500 focus:ring-red-400' : 'border-gray-300 focus:ring-blue-300'
+              }`}
+            />
+            {errors.studentLevel && <p className="text-red-500 text-sm">{errors.studentLevel}</p>}
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-semibold mb-1">Mobile</label>
+            <input
+              type="text"
+              name="mobile"
+              placeholder="Enter mobile number"
+              value={student.mobile}
+              onChange={onChangeHandler}
+              className={`w-full border px-4 py-2 rounded-lg focus:outline-none focus:ring-2 ${
+                errors.mobile ? 'border-red-500 focus:ring-red-400' : 'border-gray-300 focus:ring-blue-300'
+              }`}
+            />
+            {errors.mobile && <p className="text-red-500 text-sm">{errors.mobile}</p>}
+          </div>
+
+          <div className="text-center">
+            <button
+              type="submit"
+              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
+            >
+              Save
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default StudentAddition
+export default StudentAddition;

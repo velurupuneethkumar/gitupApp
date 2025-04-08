@@ -1,74 +1,80 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import '../../LoginView.css';
-import { deleteCourseById, displayAllCourses } from '../../services/CourseService';
+import { useNavigate } from 'react-router-dom';
+import { displayAllCourses } from '../../services/CourseService';
 
 const StudentCourseList = () => {
-
     const [courses, setCourses] = useState([]);
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     const showCourses = () => {
-
         displayAllCourses().then(response => {
             setCourses(response.data);
-            // course.courseId=response.data;
         });
-    }
-
+    };
 
     const returnBack = () => {
-        navigate('/StudentMenu')
-    }
-    
-    const registerCourse = () => {
-        alert('hello')
-    }
+        navigate('/StudentMenu');
+    };
+
+    const subscriptionCourse = (courseId) => {
+        navigate(`/course-subscription/${courseId}`);
+    };
+
     useEffect(() => {
         showCourses();
     }, []);
 
     return (
-        <div className="text-center">
-            <div>
-                <h2 className="text-center">Student Course List</h2>
-                <hr style={{ height: "3px", borderWidth: 0, color: "yellow", backgroundColor: "red" }} />
-                <div className="row">
-                    <table className="table table-striped table-bordered">
+        <div className="min-h-screen bg-gray-100 py-8 px-4">
+            <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-md p-6">
+                <h2 className="text-2xl font-bold text-center text-blue-600 mb-4">Student Course List</h2>
+                <hr className="border-t-4 border-red-500 mb-6" />
+
+                <div className="overflow-x-auto">
+                    <table className="min-w-full table-auto border border-gray-300">
                         <thead>
-                            <tr>
-                                <th> Course Id</th>
-                                <th> Course Name</th>
-                                <th> Course Hours </th>
-                                <th> Course Price </th>
-                                <th> Technology </th>
-                                <th> Register Course </th>
+                            <tr className="bg-blue-100 text-gray-700">
+                                <th className="px-4 py-2 border">Course Id</th>
+                                <th className="px-4 py-2 border">Course Name</th>
+                                <th className="px-4 py-2 border">Course Hours</th>
+                                <th className="px-4 py-2 border">Course Price</th>
+                                <th className="px-4 py-2 border">Technology</th>
+                                <th className="px-4 py-2 border">Register Course</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {
-                                courses.map((course, index) => (
-                                    <tr key={course.courseId}>
-                                        <td>{course.courseId}</td>
-                                        <td>{course.courseName}</td>
-                                        <td>{course.hours}</td>
-                                        <td>{course.price}</td>
-                                        <td>{course.technology}</td>
-                                        <td><button style={{ marginLeft: "10px" }} onClick={registerCourse} className="btn btn-danger">Register</button></td>
-                                    </tr>
-                                )
-                                )
-
-                            }
+                            {courses.map((course) => (
+                                <tr key={course.courseId} className="text-center hover:bg-gray-50">
+                                    <td className="px-4 py-2 border">{course.courseId}</td>
+                                    <td className="px-4 py-2 border">{course.courseName}</td>
+                                    <td className="px-4 py-2 border">{course.hours}</td>
+                                    <td className="px-4 py-2 border">{course.price}</td>
+                                    <td className="px-4 py-2 border">{course.technology}</td>
+                                    <td className="px-4 py-2 border">
+                                        <button
+                                            onClick={() => subscriptionCourse(course.courseId)}
+                                            className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 transition"
+                                        >
+                                            Register
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
-                    <br />
-                    <button style={{ marginLeft: "10px" }} onClick={() => returnBack()} className="btn btn-success">Return</button>
+                </div>
+
+                <div className="mt-6 text-center">
+                    <button
+                        onClick={returnBack}
+                        className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
+                    >
+                        Return
+                    </button>
                 </div>
             </div>
         </div>
+    );
+};
 
-    )
-
-}
 export default StudentCourseList;

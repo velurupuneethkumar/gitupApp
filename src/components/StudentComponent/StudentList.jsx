@@ -37,7 +37,7 @@ const StudentList = () => {
                                 <th> studentLevel</th>
                                 <th> mobile </th>
                                 <th> status </th>
-                                <th> Update Student </th>
+                                <th> Update </th>
                             </tr>
                         </thead>
                         <tbody>

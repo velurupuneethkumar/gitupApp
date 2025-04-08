@@ -27,3 +27,7 @@ export const getBillBySubscriberId = (id) =>{
 export const getBillByStudentId = () =>{
     return axios.get(SUB_URL);
 }
+
+export const getMaxInstallmentNumber=(id)=>{
+    return axios.get(ID_URL+'/'+id);
+}

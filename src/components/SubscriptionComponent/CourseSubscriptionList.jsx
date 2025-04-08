@@ -1,13 +1,15 @@
+
 import React, { useEffect, useState } from 'react';
-import { getAllSubscriptions } from '../../services/CourseSubscriptionService';
+import { getAllSubscriptionsByStudent } from '../../services/CourseSubscriptionService';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const CourseSubscriptionList = () => {
   const navigate = useNavigate()
   const [subscriptions, setSubscriptions] = useState([]);
 
   useEffect(() => {
-    getAllSubscriptions().then(response => {
+    getAllSubscriptionsByStudent().then(response => {
       setSubscriptions(response.data);
       
     });
@@ -29,24 +31,27 @@ const CourseSubscriptionList = () => {
                 <th className="border border-gray-300 px-4 py-2">Student ID</th>
                 <th className="border border-gray-300 px-4 py-2">Installments</th>
                 <th className="border border-gray-300 px-4 py-2">Installment Amount (₹)</th>
-                <th className="border border-gray-300 px-4 py-2">Total Amount (₹)</th>
                 <th className="border border-gray-300 px-4 py-2">Subscription Date</th>
                 <th className="border border-gray-300 px-4 py-2">End Date</th>
                 <th className="border border-gray-300 px-4 py-2">Status</th>
+                <th className="border border-gray-300 px-4 py-2">Payment</th>
               </tr>
             </thead>
             <tbody>
               {subscriptions.map((subscription, index) => (
+
                 <tr key={index} className="text-center border-t hover:bg-gray-100">
                   <td className="border border-gray-300 px-4 py-2">{subscription.subscriptionId}</td>
                   <td className="border border-gray-300 px-4 py-2">{subscription.courseId}</td>
                   <td className="border border-gray-300 px-4 py-2">{subscription.studentId}</td>
                   <td className="border border-gray-300 px-4 py-2">{subscription.installments}</td>
                   <td className="border border-gray-300 px-4 py-2">{subscription.installmentAmount}</td>
-                  <td className="border border-gray-300 px-4 py-2">{subscription.totalAmount}</td>
                   <td className="border border-gray-300 px-4 py-2">{subscription.subscriptionDate}</td>
                   <td className="border border-gray-300 px-4 py-2">{subscription.endDate}</td>
                   <td className="border border-gray-300 px-4 py-2">{subscription.status}</td>
+                  {(subscription.status === 'active') ? <td className="border border-gray-300 px-4 py-2"><Link to={`/payment/${subscription.subscriptionId}`}><button style={{ marginLeft: "10px" }} className="btn btn-info">Payment</button></Link></td> :
+                   <td className="border border-gray-300 px-4 py-2">-</td>}
+                  
                 </tr>
               ))}
             </tbody>

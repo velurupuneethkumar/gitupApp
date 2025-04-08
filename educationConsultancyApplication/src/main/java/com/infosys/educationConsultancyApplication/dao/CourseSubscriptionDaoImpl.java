@@ -1,3 +1,4 @@
+
 package com.infosys.educationConsultancyApplication.dao;
 
 import java.util.List;
@@ -59,6 +60,18 @@ public class CourseSubscriptionDaoImpl implements CourseSubscriptionDao {
 	public List<CourseSubscription> getAllSubscriptionsByStudent(String id) {
 		// TODO Auto-generated method stub
 		return repository.getAllSubscriptionsByStudentId(id);
+	}
+
+	@Override
+	public String getStatusBySubscriptionId(String subscriptionId) {
+		// TODO Auto-generated method stub
+		return repository.getStatusBySubscriptionId(subscriptionId);
+	}
+
+	@Override
+	public String getStatusByCourseIdStudentId(Long courseId, String studentId) {
+		// TODO Auto-generated method stub
+		return repository.getStatusByCourseIdStudentId(courseId,studentId);
 	}
 	
 	

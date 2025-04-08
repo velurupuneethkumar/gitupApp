@@ -1,3 +1,4 @@
+
 package com.infosys.educationConsultancyApplication.dao;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface CourseSubscriptionDao {
 	public List<CourseSubscription> getCurrentSubscriptions();
 	public List<CourseSubscription> getAllSubscriptionsByStudent(String id);
 	public String generateSubscriptionId();
+	public String getStatusBySubscriptionId(String subscriptionId);
+	public String getStatusByCourseIdStudentId(Long courseId,String studentId);
 }

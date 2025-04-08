@@ -90,6 +90,18 @@ public class SubcriptionPaymentController {
 		return subscriptionDao.generateSubscriptionId();
 	}
 	
+	@GetMapping("/subscription-id/{id}")
+	public String getStatusBySubscriptionId(@PathVariable String id) {
+		return subscriptionDao.getStatusBySubscriptionId(id);
+	}
+	
+	@GetMapping("/sub-course/{id}") 
+	public String getStatusByCourseIdStudentId(@PathVariable Long id) {
+		String userId = service.getUserId();
+		Student student = studentDao.getStudentByUsername(userId);
+		return subscriptionDao.getStatusByCourseIdStudentId(id,student.getRegistrationNumber());
+	}
+	
 	@PostMapping("/payment")
 	public void savePayment(@RequestBody Payment payment) {
 		String userId = service.getUserId();
@@ -123,5 +135,10 @@ public class SubcriptionPaymentController {
 	@GetMapping("/payment-id")
 	public String generateBillNumber() {
 		return paymentDao.generateBillNumber();
+	}
+	
+	@GetMapping("/payment-id/{id}")
+	public Integer getMaxInstallmentNumber(@PathVariable String id) {
+		return paymentDao.getMaxInstallmentNumber(id);
 	}
 }

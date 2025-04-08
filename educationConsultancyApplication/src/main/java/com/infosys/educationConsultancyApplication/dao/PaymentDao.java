@@ -1,3 +1,4 @@
+
 package com.infosys.educationConsultancyApplication.dao;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface PaymentDao {
 	public List<Payment> getBillBySubscriptionId(String subscriptionId);
 	public List<Payment> getBillByStudentId(String studentId);
 	public String generateBillNumber();
+	public Integer getMaxInstallmentNumber(String subscriptionId);
 }

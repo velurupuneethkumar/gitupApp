@@ -1,3 +1,4 @@
+
 package com.infosys.educationConsultancyApplication.bean;
 
 import jakarta.persistence.Entity;
@@ -16,6 +17,7 @@ import lombok.ToString;
 @Setter(AccessLevel.PUBLIC)
 @ToString
 public class CourseSubscription {
+	
 	@Id
 	private String subscriptionId;//auto generated
 	private Integer installments;
@@ -24,22 +26,26 @@ public class CourseSubscription {
 	private Long courseId;//auto assigned
 	private String endDate;//calculate assignment from system date
 	private String subscriptionDate;
+	private Integer totalAmount;
 	private String status;//active //expire //completed
-	public CourseSubscription() {
+	
+	public CourseSubscription(String subscriptionId, Integer installments, Double installmentAmount, String studentId,
+			Long courseId, String endDate, String subscriptionDate, Integer totalAmount, String status) {
 		super();
-		// TODO Auto-generated constructor stub
-	}
-	public CourseSubscription(Integer installments, Double installmentAmount, String studentId, String subscriptionId,
-			Long courseId, String endDate, String subscriptionDate, String status) {
-		super();
+		this.subscriptionId = subscriptionId;
 		this.installments = installments;
 		this.installmentAmount = installmentAmount;
 		this.studentId = studentId;
-		this.subscriptionId = subscriptionId;
 		this.courseId = courseId;
 		this.endDate = endDate;
 		this.subscriptionDate = subscriptionDate;
+		this.totalAmount = totalAmount;
 		this.status = status;
+	}
+	
+	public CourseSubscription() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	
 	public Integer getInstallments() {
@@ -92,8 +98,15 @@ public class CourseSubscription {
 	}
 	@Override
 	public String toString() {
-		return "Subscription [installments=" + installments + ", installmentAmount=" + installmentAmount
-				+ ", studentId=" + studentId + ", subscriptionId=" + subscriptionId + ", courseId=" + courseId
-				+ ", endDate=" + endDate + ", subscriptionDate=" + subscriptionDate + ", status=" + status + "]";
+		return "CourseSubscription [subscriptionId=" + subscriptionId + ", installments=" + installments
+				+ ", installmentAmount=" + installmentAmount + ", studentId=" + studentId + ", courseId=" + courseId
+				+ ", endDate=" + endDate + ", subscriptionDate=" + subscriptionDate + ", totalAmount=" + totalAmount
+				+ ", status=" + status + "]";
+	}
+	public Integer getTotalAmount() {
+		return totalAmount;
+	}
+	public void setTotalAmount(Integer totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 }

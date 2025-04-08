@@ -1,7 +1,7 @@
+
 package com.infosys.educationConsultancyApplication.bean;
+
 import jakarta.persistence.Entity;
-
-
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

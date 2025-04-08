@@ -16,4 +16,7 @@ public interface PaymentRepository extends JpaRepository<Payment, String> {
 	
 	@Query("SELECT a FROM Payment a WHERE a.studentId = ?1")
 	public List<Payment> getBillByStudentId(String studentId);
+	
+	@Query("select max(installmentNo) from Payment where subscriptionId=?1")
+	public Integer getMaxInstallmentNumber(String subscriptionId);
 }

@@ -1,3 +1,4 @@
+
 package com.infosys.educationConsultancyApplication.dao;
 
 import java.util.List;
@@ -58,6 +59,15 @@ public class PaymentDaoImpl implements PaymentDao {
 		}
 		String newId = "BL"+id;
 		return newId;
+	}
+
+	@Override
+	public Integer getMaxInstallmentNumber(String subscriptionId) {
+		// TODO Auto-generated method stub
+		Integer val = repository.getMaxInstallmentNumber(subscriptionId);
+		if(val == null)
+			val = 0;
+		return val;
 	}
 
 }
